@@ -3,13 +3,15 @@ from unittest import case
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
+
+import HandleFirebase
 from JsonDBgenerator import generate_and_save_data
-import handleFirebase
+import HandleFirebase as handleFirebase
 import StressTest
 
-cred = credentials.Certificate("firebase_key/auth-social-network-489ae-firebase-adminsdk-gz5c0-e0419a6447.json")
+cred = credentials.Certificate("firebase_key/social-network-firebase-23e6e-firebase-adminsdk-tr9aq-774a662588.json")
 firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://auth-social-network-489ae-default-rtdb.europe-west1.firebasedatabase.app'})
+    'databaseURL': "https://social-network-firebase-23e6e-default-rtdb.europe-west1.firebasedatabase.app"})
 ref = db.reference("/")
 
 # StressTest.stressing(ref)
@@ -19,7 +21,8 @@ menu = [" ","1","2","3","4","5"]
 while choice in menu:
     choice = input(
         " Press 1 to get json files in social media folder\n press 2 to write json files to Firebase,"
-        "\n press 3 to search for last user,\npress 4 to delete a node,\npress 5 to stress test db,\n"
+        "\n press 3 to search for last user,\n press 4 to delete a node,\n press 5 to stress test db,"
+        "\n press 6 to perform post filtering,\n"
         "press anything else to exit:\n ")
     if choice == "1":
         population = input("Select population for nodes: ")
@@ -30,15 +33,19 @@ while choice in menu:
         handleFirebase.post_json_files(ref)
     elif choice == "3":
         print("just searching for last user id")
-        handleFirebase.writeUser(ref)
+        handleFirebase.writeUser(1,ref)
     elif choice == "4":
         for key in ref.get().keys():
             print(key)
         node = input("Enter the node you want to delete from Firebase: ")
         handleFirebase.deleteNode(ref, node)
     elif choice == "5":
-        userThreads = input("select the number of threads you want to test: ")
-        StressTest.stressing(ref, int(userThreads))
+        # userThreads = input("select the number of threads you want to test: ")
+        # StressTest.stressing(ref, 10)
+        StressTest.stressing(ref, 100)
+        # StressTest.stressing(ref, 500)
+    elif choice == "6":
+        HandleFirebase.bulkWritePage(0, ref)
     else:
         print("exiting")
 
