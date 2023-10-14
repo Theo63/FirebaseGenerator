@@ -23,6 +23,10 @@ def stressing(ref, userThreads):
 
     threadsCreatorList = []
 
+    pages_ref = ref.child('pages')
+    global last_page_id
+    last_page_id = int(list(pages_ref.order_by_key().limit_to_last(1).get().keys())[0])
+
     # ----------------- This is the code for creating threads without splitting them to threads -------------------- #
     # userThreadsList = []
     # for i in range(userThreads):
@@ -93,14 +97,18 @@ def stressing(ref, userThreads):
     PlotGenerator.plotCreator(sorted_dict)
 
 
+
+
+
 # Function to simulate a database operation
 def perform_database_operationWrite(thread_index, ref, users, col):
     writestart = time.time()
     tableIndex = int(col * (users / 5) + thread_index)
     threadTimes[tableIndex] = [writestart]
+
     global newUserIndex
     newUserIndex += 1  # we increment before starting because of threading (we don't know when thread will finish writeUser)
-    HandleFirebase.bulkWritePage(newUserIndex - 1, ref)
+    HandleFirebase.bulkWritePage(newUserIndex - 1, ref, last_page_id)
     print(f"Thread {tableIndex} completed.")
     writeend = time.time()
     threadTimes[tableIndex].append(writeend)
@@ -189,20 +197,19 @@ def theadCreate(threadno, userThreads, userThreadsList):
         # Initialize Firebase Admin SDK for the client
 
         cred = credentials.Certificate(
-            "firebase_key/social-network-firebase-23e6e-firebase-adminsdk-tr9aq-774a662588.json")
+            "firebase_key/social-network-cfa25-firebase-adminsdk-1up9x-40571cb5c4.json")
         firebase_admin.initialize_app(cred, {
-            'databaseURL': f'https://social-network-firebase-23e6e-default-rtdb.europe-west1.firebasedatabase.app'
+            'databaseURL': f'https://social-network-cfa25-default-rtdb.europe-west1.firebasedatabase.app'
         }, name=app_name)  # The name=app_name parameter is used to specify
         # a unique name for the Firebase app instance you are initializing
 
         # Create a reference to the /data path for the client
         ref = db.reference(app=firebase_admin.get_app(name=app_name),
-                           url=f'https://social-network-firebase-23e6e-default-rtdb.europe-west1.firebasedatabase.app/data')
+                           url=f'https://social-network-cfa25-default-rtdb.europe-west1.firebasedatabase.app/data')
 
         userThreadsList[threadno].append((app_name, ref))  # a list that contains lists of threads
         # print("Thread "+ str(threading.current_thread())+" creating "+ str(app_name))
 
-    # Create and start threads
     for i in range(len(userThreadsList[threadno])):
         # print(str(userThreadsList[threadno][i][0]) + ", "+ str(user5ThreadsList[threadno][i][1]))
         thread = threading.Thread(target=perform_database_operationWrite,

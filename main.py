@@ -9,9 +9,9 @@ from JsonDBgenerator import generate_and_save_data
 import HandleFirebase as handleFirebase
 import StressTest
 
-cred = credentials.Certificate("firebase_key/social-network-firebase-23e6e-firebase-adminsdk-tr9aq-774a662588.json")
+cred = credentials.Certificate("firebase_key/social-network-cfa25-firebase-adminsdk-1up9x-40571cb5c4.json")
 firebase_admin.initialize_app(cred, {
-    'databaseURL': "https://social-network-firebase-23e6e-default-rtdb.europe-west1.firebasedatabase.app"})
+    'databaseURL': "https://social-network-cfa25-default-rtdb.europe-west1.firebasedatabase.app"})
 ref = db.reference("/")
 
 # StressTest.stressing(ref)
@@ -41,9 +41,9 @@ while choice in menu:
         handleFirebase.deleteNode(ref, node)
     elif choice == "5":
         # userThreads = input("select the number of threads you want to test: ")
-        # StressTest.stressing(ref, 10)
-        StressTest.stressing(ref, 100)
-        # StressTest.stressing(ref, 500)
+        StressTest.stressing(ref, 10)
+        # StressTest.stressing(ref, 100)
+        # StressTest.stressing(ref, 200)
     elif choice == "6":
         HandleFirebase.bulkWritePage(0, ref)
     else:

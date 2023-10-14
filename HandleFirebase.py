@@ -122,11 +122,6 @@ def get_posts_on_date_range(ref):
         f'{end_date} 23:59:59').get()
     calculate_file_size(post_snapshot, " complex search")
     elapsed_time = time.time() - start_time
-    # Serialize the data to a JSON string
-    json_data = json.dumps(post_snapshot)
-
-    # Calculate the size of the JSON string
-    data_size_bytes = sys.getsizeof(json_data)
 
     # # If there are matching posts, retrieve the corresponding users
     # if post_snapshot:
@@ -197,7 +192,7 @@ def update_username(ref):
         # Reference the specific user by their index
         user_id = str(random_user_index)
         user_ref = users_ref.child(user_id)
-
+        calculate_file_size(user_ref, "update ref")
         # Update the username for the random user
         user_ref.update({'username': new_username})
 
@@ -208,23 +203,10 @@ def update_username(ref):
         print(f"Error updating username: {e}")
 
 
-def bulkWritePage(thread_index, ref):
+def bulkWritePage(thread_index, ref, last_page_id):
     # Reference to the 'users' node
     pages_ref = ref.child('pages')
-    # Get a snapshot of the user data
-    pages_snapshot = pages_ref.get()
-    if pages_snapshot:
-        data_list = pages_snapshot
-
-        # Determine the last index of the collection
-        last_page_id = len(data_list) - 1
-
-        # last_page_id = max([int(page['page_id']) for page in pages_snapshot])
-        print("\nGenerating hashtag: " + str(last_page_id))
-    else:
-        print("No hashtag data available.")
-
-    # pageFile = "largeSocialDBJson/hashtagEntry.json"
+    # print("\nGenerating hashtag: " + str(last_page_id))
 
     dummy_pages = JsonDBgenerator.generate_data(10, JsonDBgenerator.generate_page)
     userFile = "largeSocialDBJson/userEntry" + str(last_page_id + thread_index) + ".json"
@@ -236,11 +218,10 @@ def bulkWritePage(thread_index, ref):
 
     with open(os.path.join(directory, 'bulkPages.json')) as f:
         file_contents = json.load(f)
-    pages_ref.child(str(int(last_page_id) + thread_index+1)).set(
+    pages_ref.child(str(int(last_page_id) + thread_index + 1)).set(
         file_contents)  # get the filename as first layer of tree and assign json data as its children
     calculate_file_size(file_contents, "bulkwriting")
     os.remove(userFile)
-
 
 
 def calculate_file_size(file_contents, operation):
