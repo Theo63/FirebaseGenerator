@@ -43,54 +43,9 @@ while choice in menu:
         # userThreads = input("select the number of threads you want to test: ")
         StressTest.stressing(ref, 10)
         # StressTest.stressing(ref, 100)
-        # StressTest.stressing(ref, 200)
+        # StressTest.stressing(ref, 500)
     elif choice == "6":
         HandleFirebase.bulkWritePage(0, ref)
     else:
         print("exiting")
 
-#
-# Reference to the Firebase database root
-# ref = db.reference()
-#
-# # Load data from Firebase
-# users_ref = ref.child('users')
-# users_data = users_ref.get()
-#
-# if users_data is None:
-#     print("No data found in the 'users' path.")
-# else:
-#     # Iterate through each user in the list
-#     for user in users_data:
-#         print("User ID:", user["user_id"])
-#         print("Username:", user["username"])
-#         print("Fullname:", user["fullname"])
-#         # Print other user attributes
-#         print()  # Add an empty line between users
-
-
-#
-# ####### Load Data with UPDATE###################
-# choice = input(" Press 1 to get json files in social db")
-# if choice == "1":
-#     #Get json files in social media folder
-#     cwd = os.getcwd()  # Get the current working directory (cwd)
-#     directory = cwd + "/largeSocialDBJson"
-#     files = os.listdir(directory)
-#     index = 0
-#     while index < len(files):
-#         filename = files[index]
-#         if filename.endswith('.json'):
-#             with open(os.path.join(directory, filename)) as f:
-#                 print("reading file " + filename)
-#                 file_contents = json.load(f)
-#                 id = 0
-#             for i in range(0, len(file_contents), chunk_size):
-#                 batch_data = file_contents[i:i + chunk_size]
-#                 batch = {}
-#                 # ref.child(os.path.splitext(filename)[0]).set(batch_data)  # get the filename as first layer of tree and assign json data as its children
-#                 for j, item in enumerate(file_contents, start=len(ref.child(os.path.splitext(filename)[0]).get())):
-#                     new_key = j  # Use the counter as the key  # Generate a new unique key
-#                     batch[new_key] = item
-#                 ref.child(os.path.splitext(filename)[0]).update(batch)
-#         index += 1

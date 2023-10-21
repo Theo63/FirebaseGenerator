@@ -173,13 +173,11 @@ def timeSort(threadTimes):
     max_value3 = float(0.0)  # Initialize with positive infinity
     # MAX TIME
     for key, values in threadTimes.items():
-        value3 = values[1]  # Assuming value2 is always at index 1
+        value3 = values[1]
 
-        # Compare and update the minimum value2
         if value3 > max_value3:
             max_value3 = value3
 
-    # print("Maximum value2 across all keys:", max_value3)
     print("---------  All threads completed in:" + str(max_value3 - min_value2) + " seconds.----------------")
 
 
@@ -201,7 +199,7 @@ def theadCreate(threadno, userThreads, userThreadsList):
         firebase_admin.initialize_app(cred, {
             'databaseURL': f'https://social-network-cfa25-default-rtdb.europe-west1.firebasedatabase.app'
         }, name=app_name)  # The name=app_name parameter is used to specify
-        # a unique name for the Firebase app instance you are initializing
+        # a unique name for the Firebase app instance we are initializing
 
         # Create a reference to the /data path for the client
         ref = db.reference(app=firebase_admin.get_app(name=app_name),

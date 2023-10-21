@@ -93,10 +93,9 @@ def searchUsername(ref):
     query = users_ref.order_by_child('username').equal_to(username).get()
     calculate_file_size(query, "search")
     if query:
-        # The query is a dictionary of user data, so you can loop through it
         for user_id, user_data in query.items():
             print(f"---Found User with ID: {user_id} Username: {user_data['username']} Email: {user_data['email']}")
-            # Add more fields as needed
+
     else:
         print(f"No user found with the username: {username}")
 
@@ -104,15 +103,13 @@ def searchUsername(ref):
 #  testing scenario
 # Function to retrieve users with posts on a specific date
 def get_posts_on_date_range(ref):
-    # Reference to the Firebase Database
+
     start_date = "2023-03-15"
     end_date = "2023-03-30"
     privacy_setting = "Public"
     # Initialize an empty dictionary for users
     matching_posts = []
 
-    # Reference to the "users" and "posts" nodes
-    # users_ref = ref.child('users')
     posts_ref = ref.child('posts')
 
     # Record time
